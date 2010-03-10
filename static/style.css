@@ -1,15 +1,138 @@
+/* Page layout */
+body
+{
+    margin: 0 auto;
+    width: 750px;
+
+    padding: 10px;
+}
+
+/* Header layout */
+div#header
+{
+	clear: both;
+	width: 100%;
+}
+
+div#header img
+{
+	border: 0;
+	vertical-align: top;
+}
+
+div#header h1
+{
+	display: inline;
+}
+
+div#header a
+{
+	color: #000;
+	text-decoration: none;
+}
+
+/* Navigation layout */
+div#nav
+{
+	background: lightgray;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	margin: 10px 0;
+
+	height: 30px;
+}
+
+div#nav ul
+{
+	padding: 0 10px;
+	margin: 10;
+}
+
+div#nav li
+{
+	display: inline;
+}
+
+div#nav a
+{
+	display: block;
+	float: left;
+	height: 20px;
+	margin: 0 5px;
+}
+
+
+/* Column layout */
+div.twocolumn
+{
+	width: 370px;
+}
+
+div.leftcolumn
+{
+	float: left;
+}
+
+div.rightcolumn
+{
+	float: right;
+}
+
+
+/* Footer layout */
+div#footer
+{
+	clear: both;
+	border-top: 1px solid #999;
+	font-size: 60%;
+}
+
+
+/* Styling */
 html
 {
-    background: #ccc;
+    background: #fff;
 }
 
 body
 {
-    width: 640px;
-    margin: 10px auto;
-    padding: 10px;
-    border: 1px solid #333;
-    background: #fff;
+	font-family: "Lucida Grande", Helvetica, sans-serif;
+	font-size: 100%;
+}
+
+h1
+{
+	margin: 10px;
+	font-size: 180%;
+	text-shadow: #aaa 1px 1px 2px;
+}
+
+h2
+{
+	margin: 0;
+	font-size: 140%;
+	text-shadow: #aaa 1px 1px 2px;
+}
+
+div#nav a
+{
+	color: #333;
+	font-weight: bold;
+	padding: 6px 10px 4px 10px;
+	text-decoration: none;
+	text-shadow: #fff 1px 1px 2px;
+}
+
+div#nav a:hover, div#hav a:active
+{
+	background: grey;
+	color: #fff;
+	text-shadow: #000 1px 1px 2px;
+}
+
+ul
+{
+	padding: 0 0 0 1.5em;
 }
 
 .left
