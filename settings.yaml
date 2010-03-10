@@ -1,5 +1,5 @@
-approot: http://localhost:3000/
-static-root: http://localhost:3000/static/
+approot: http://dutchhug.nl/
+static-root: http://dutchhug.nl/static/
 static-dir: static
 template-dir: templates
 port: 3000
