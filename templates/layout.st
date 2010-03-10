@@ -1,7 +1,8 @@
 <!doctype html>
 <meta charset=utf-8>
-<meta name="viewport" content="width = 640px">
+<meta name=viewport content="width = 640px">
 <link rel=stylesheet href=$staticroot$style.css>
+<link rel=apple-touch-icon href=$staticroot$apple-touch-icon.png>
 <title>$title$</title>
 $extrahead$
 $content$

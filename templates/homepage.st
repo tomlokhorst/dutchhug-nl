@@ -1,5 +1,5 @@
 $layout(
-    title={Dutch Haskell User Group - dutchhug.nl};
+    title={Dutch HUG};
     content={
 <img src=$staticroot$logo.png class=right>
 <h1>Dutch Haskell User Group</h1>
