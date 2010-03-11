@@ -4,6 +4,10 @@ import Yesod.Helpers.Static
 import qualified Data.Object.Yaml
 import qualified Safe.Failure
 
+import Control.Monad
+import Text.StringTemplate
+import WikiScrape
+
 data DutchHug = DutchHug
     { settings :: Settings
     , templateGroup :: TemplateGroup
@@ -63,14 +67,23 @@ instance YesodTemplate DutchHug where
         . setHtmlAttrib "approot" (approot y)
         . setHtmlAttrib "staticroot" (staticRoot $ settings y)
 
+setAttrib :: (ToSElem a) => String -> a -> HtmlTemplate -> HtmlTemplate
+setAttrib k v (HtmlTemplate t) = HtmlTemplate $ setAttribute k v t
+
 homepageH :: Handler DutchHug RepHtml
-homepageH = templateHtml "homepage" return
+homepageH = templateHtml "homepage"
+              (wikiTemplate "Intro" >=> wikiTemplate "Upcoming" >=> wikiTemplate "Previously")
 
 dutchHugDayH :: Handler DutchHug RepHtml
-dutchHugDayH = templateHtml "dutchhugday" return
+dutchHugDayH = templateHtml "dutchhugday" (wikiTemplate "DutchHugDay")
 
 meetingsH :: Handler DutchHug RepHtml
-meetingsH = templateHtml "meetings" return
+meetingsH = templateHtml "meetings" (wikiTemplate "Meetings")
+
+wikiTemplate :: String -> (HtmlTemplate -> IO HtmlTemplate)
+wikiTemplate name h = do
+  s <- cachedScrape ("Dutch_HUG/" ++ name)
+  return $ setAttrib name s h
 
 serveStatic' :: Method -> [String]
              -> Handler DutchHug [(ContentType, Content)]
