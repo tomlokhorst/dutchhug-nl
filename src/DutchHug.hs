@@ -75,14 +75,20 @@ homepageH = templateHtml "homepage"
               (wikiTemplate "Intro" >=> wikiTemplate "Upcoming" >=> wikiTemplate "Previously")
 
 dutchHugDayH :: Handler DutchHug RepHtml
-dutchHugDayH = templateHtml "dutchhugday" (wikiTemplate "DutchHugDay")
+dutchHugDayH = templateHtml "dutchhugday" (wikiPage "DutchHugDay")
 
 meetingsH :: Handler DutchHug RepHtml
-meetingsH = templateHtml "meetings" (wikiTemplate "Meetings")
+meetingsH = templateHtml "meetings" (wikiPage "Meetings")
+
+wikiPage :: String -> (HtmlTemplate -> IO HtmlTemplate)
+wikiPage = wiki ""
 
 wikiTemplate :: String -> (HtmlTemplate -> IO HtmlTemplate)
-wikiTemplate name h = do
-  s <- cachedScrape ("Dutch_HUG/" ++ name)
+wikiTemplate = wiki "Template:"
+
+wiki :: String -> String -> (HtmlTemplate -> IO HtmlTemplate)
+wiki prefix name h = do
+  s <- cachedScrape (prefix ++ "Dutch_HUG/" ++ name)
   return $ setAttrib name s h
 
 serveStatic' :: Method -> [String]

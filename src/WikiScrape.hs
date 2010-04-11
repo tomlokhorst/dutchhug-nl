@@ -1,20 +1,23 @@
 module WikiScrape where
 
 import Control.Monad
+import Data.List
 import Network.HTTP
 import System.IO
 import System.Posix.Files
 import System.Posix.Time
 import Text.HTML.TagSoup
 
+-- This code could really benefit from a proper parser!
 scrape :: String -> IO String
 scrape s = do
   body <- getResponseBody =<< simpleHTTP (getRequest $ "http://haskell.org/haskellwiki/" ++ s)
   let tags = parseTags body
   let ts = tags
             |> dropWhile (/= TagOpen "h1" [("class", "pagetitle")])
-            |> dropWhile (/= TagOpen "p" [("class", "subpages")])
-            |> dropWhile (/= TagClose "p") |> stail
+            |> \t -> (if "Template" `isPrefixOf` s
+                      then t |> dropWhile (/= TagClose "h1") |> stail
+                      else t |> dropWhile (/= TagOpen "p" [("class", "subpages")]) |> dropWhile (/= TagClose "p") |> stail)
             |> removeEditSections
             |> takeWhile (/= TagOpen "div" [("class", "printfooter")])
             |> renderTags
