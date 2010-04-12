@@ -2,10 +2,10 @@ $layout(
     title={Dutch HUG};
     content={
 <div class="twocolumn leftcolumn">
-<h2>Upcoming</h1>
+<h2>Upcoming</h2>
 $Upcoming$
 
-<h2>Previously</h1>
+<h2>Previously</h2>
 $Previously$
 </div>
 
