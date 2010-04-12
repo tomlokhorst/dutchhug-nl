@@ -145,3 +145,8 @@ ul
 	float: right;
 }
 
+a img
+{
+	border: 0;
+}
+

@@ -20,6 +20,7 @@ scrape s = do
                       else t |> dropWhile (/= TagOpen "p" [("class", "subpages")]) |> dropWhile (/= TagClose "p") |> stail)
             |> removeEditSections
             |> takeWhile (/= TagOpen "div" [("class", "printfooter")])
+            |> fixInternalLinks
             |> renderTags
   return ts
 
@@ -28,6 +29,16 @@ infixl 5 |>
 -- A little F# experiment :-)
 (|>) :: a -> (a -> b) -> b
 (|>) = flip ($)
+
+fixInternalLinks :: [Tag String] -> [Tag String]
+fixInternalLinks = map f
+  where
+    f (TagOpen "a"   xs) = TagOpen "a"   $ map g xs
+    f (TagOpen "img" xs) = TagOpen "img" $ map g xs
+    f t                  = t
+    g ("href", v) = ("href", if "/" `isPrefixOf` v then "http://haskell.org" ++ v else v)
+    g ("src",  v) = ("src",  if "/" `isPrefixOf` v then "http://haskell.org" ++ v else v)
+    g x           = x
 
 removeEditSections :: [Tag String] -> [Tag String]
 removeEditSections = reverse . fst . foldl f ([], True)
