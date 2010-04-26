@@ -150,3 +150,8 @@ a img
 	border: 0;
 }
 
+tr
+{
+    vertical-align: top;
+}
+
