@@ -50,6 +50,8 @@ instance Yesod DutchHug where
     resources = [$mkResources|
 /:
     GET: homepageH
+/AboutUs:
+    GET: aboutUsH
 /Meetings:
     GET: meetingsH
 /DutchHugDay:
@@ -74,11 +76,14 @@ homepageH :: Handler DutchHug RepHtml
 homepageH = templateHtml "homepage"
               (wikiTemplate "Intro" >=> wikiTemplate "Upcoming" >=> wikiTemplate "Previously")
 
-dutchHugDayH :: Handler DutchHug RepHtml
-dutchHugDayH = templateHtml "dutchhugday" (wikiPage "DutchHugDay")
+aboutUsH :: Handler DutchHug RepHtml
+aboutUsH = templateHtml "aboutus" (wikiPage "AboutUs")
 
 meetingsH :: Handler DutchHug RepHtml
 meetingsH = templateHtml "meetings" (wikiPage "Meetings")
+
+dutchHugDayH :: Handler DutchHug RepHtml
+dutchHugDayH = templateHtml "dutchhugday" (wikiPage "DutchHugDay")
 
 wikiPage :: String -> (HtmlTemplate -> IO HtmlTemplate)
 wikiPage = wiki ""

@@ -11,6 +11,7 @@ $extrahead$
 </div>
 <div id=nav>
 <ul>
+<li><a href=$approot$AboutUs>About us</a></li>
 <li><a href=$approot$Meetings>Meetings</a></li>
 <li><a href=$approot$DutchHugDay>Dutch HUG day</a></li>
 <li><a href=http://groups.google.com/group/dutch-hug>Mailing list</a></li>
