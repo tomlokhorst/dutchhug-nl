@@ -145,6 +145,22 @@ ul
 	float: right;
 }
 
+a
+{
+    color: #8B0000;
+    text-decoration: none;
+}
+
+a:hover
+{
+    text-decoration: underline;
+}
+
+a:visited
+{
+    color: #483D8B;
+}
+
 a img
 {
 	border: 0;
@@ -153,5 +169,43 @@ a img
 tr
 {
     vertical-align: top;
+}
+
+.pics p
+{
+    color: #fff;
+    font-size: 150%;
+    text-align: center;
+    margin: 0;
+    margin-top: -40px;
+
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+.pics p span
+{
+    margin: 0 2px;
+}
+
+.pics span.grey
+{
+    color: gray;
+}
+
+.picsbox
+{
+    background: #eee;
+    border: 1px solid #ccc;
+    float: right;
+    padding: 10px;
+    margin: 5px;
+    width: 370px;
+}
+
+.picsbox p
+{
+    margin: 5px 0 0 0;
 }
 

@@ -16,9 +16,11 @@ scrape s = do
   let ts = tags
             |> dropWhile (/= TagOpen "h1" [("class", "pagetitle")])
             |> \t -> (if "Template" `isPrefixOf` s
-                      then t |> dropWhile (/= TagClose "h1") |> stail
+                      -- then t |> dropWhile (/= TagClose "h1") |> stail
+                      then t |> dropWhile (/= TagOpen "p" [("class", "subtitle")]) |> dropWhile (/= TagClose "p") |> stail
                       else t |> dropWhile (/= TagOpen "p" [("class", "subpages")]) |> dropWhile (/= TagClose "p") |> stail)
             |> removeEditSections
+            |> removeToc
             |> takeWhile (/= TagOpen "div" [("class", "printfooter")])
             |> fixInternalLinks
             |> renderTags
@@ -48,6 +50,18 @@ removeEditSections = reverse . fst . foldl f ([], True)
      where
        isOpen  = t ~== TagOpen "div" [("class", "editsection")]
        isClose = t ~== TagClose "div"
+
+removeToc :: [Tag String] -> [Tag String]
+removeToc = removePart (TagOpen "table" [("id", "toc")]) (TagClose "p")
+
+removePart :: Tag String -> Tag String -> [Tag String] -> [Tag String]
+removePart start end = reverse . fst . foldl f ([], True)
+  where
+    f (ts, b) t = ( if b && not isOpen then t:ts else ts
+                  , if b then not isOpen else isClose)
+     where
+       isOpen  = t ~== start
+       isClose = t ~== end
 
 stail :: [a] -> [a]
 stail []     = []

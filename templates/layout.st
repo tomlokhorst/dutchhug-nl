@@ -3,6 +3,8 @@
 <meta name=viewport content="width = 768px">
 <link rel=stylesheet href=$staticroot$style.css>
 <link rel=apple-touch-icon href=$staticroot$apple-touch-icon.png>
+<script src=http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js></script>
+<script src=$staticroot$jquery.cycle.min.js></script>
 <title>$title$</title>
 $extrahead$
 <div id=header>
