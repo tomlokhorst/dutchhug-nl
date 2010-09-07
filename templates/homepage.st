@@ -1,5 +1,5 @@
 $layout(
-    title={Dutch HUG};
+    title={Dutch Haskell User Group};
     content={
 <div class="twocolumn leftcolumn">
 <h2>Upcoming</h2>
