@@ -12,11 +12,13 @@ $Previously$
 <div class="twocolumn rightcolumn">
 <div id=pics class=pics>
 <div><img src=$staticroot$first-meeting-frontpage.jpg width=370 height=278>
-<p><span class=white>&#8226;</span><span class=grey>&#8226;</span><span class=grey>&#8226;</span></div>
-<div><img src=$staticroot$dutchhugday-2010_03.jpg width=370 height=278>
-<p><span class=grey>&#8226;</span><span class=white>&#8226;</span><span class=grey>&#8226;</span></div>
+<p><span class=white>&#8226;</span><span class=grey>&#8226;</span><span class=grey>&#8226;</span><span class=grey>&#8226;</span></div>
 <div><img src=$staticroot$dutchhugday-2010_07.jpg width=370 height=278>
-<p><span class=grey>&#8226;</span><span class=grey>&#8226;</span><span class=white>&#8226;</span></div>
+<p><span class=grey>&#8226;</span><span class=white>&#8226;</span><span class=grey>&#8226;</span><span class=grey>&#8226;</span></div>
+<div><img src=$staticroot$meeting-october-2010_1.jpg width=370 height=278>
+<p><span class=grey>&#8226;</span><span class=grey>&#8226;</span><span class=white>&#8226;</span><span class=grey>&#8226;</span></div>
+<div><img src=$staticroot$meeting-october-2010_2.jpg width=370 height=278>
+<p><span class=grey>&#8226;</span><span class=grey>&#8226;</span><span class=grey>&#8226;</span><span class=white>&#8226;</span></div>
 </div>
 <script>
 \$("#pics").cycle("fade");
