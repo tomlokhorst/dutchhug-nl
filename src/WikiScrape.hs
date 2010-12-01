@@ -7,21 +7,20 @@ import System.IO
 import System.Posix.Files
 import System.Posix.Time
 import Text.HTML.TagSoup
+import Text.HTML.TagSoup.Match
 
 -- This code could really benefit from a proper parser!
-scrape :: String -> IO String
+-- scrape :: String -> IO String
 scrape s = do
   body <- getResponseBody =<< simpleHTTP (getRequest $ "http://haskell.org/haskellwiki/" ++ s)
   let tags = parseTags body
   let ts = tags
-            |> dropWhile (/= TagOpen "h1" [("class", "pagetitle")])
-            |> \t -> (if "Template" `isPrefixOf` s
-                      -- then t |> dropWhile (/= TagClose "h1") |> stail
-                      then t |> dropWhile (/= TagOpen "p" [("class", "subtitle")]) |> dropWhile (/= TagClose "p") |> stail
-                      else t |> dropWhile (/= TagOpen "p" [("class", "subpages")]) |> dropWhile (/= TagClose "p") |> stail)
-            |> removeEditSections
-            |> removeToc
-            |> takeWhile (/= TagOpen "div" [("class", "printfooter")])
+            |> dropWhile (~/= TagOpen "h1" [])
+            |> dropWhile (not . tagComment (const True))
+            |> tail
+            |> dropWhile (tagText (const True))
+            -- |> removeEditSections
+            |> takeWhile (not . tagComment (const True))
             |> fixInternalLinks
             |> renderTags
   return ts
@@ -50,18 +49,6 @@ removeEditSections = reverse . fst . foldl f ([], True)
      where
        isOpen  = t ~== TagOpen "div" [("class", "editsection")]
        isClose = t ~== TagClose "div"
-
-removeToc :: [Tag String] -> [Tag String]
-removeToc = removePart (TagOpen "table" [("id", "toc")]) (TagClose "p")
-
-removePart :: Tag String -> Tag String -> [Tag String] -> [Tag String]
-removePart start end = reverse . fst . foldl f ([], True)
-  where
-    f (ts, b) t = ( if b && not isOpen then t:ts else ts
-                  , if b then not isOpen else isClose)
-     where
-       isOpen  = t ~== start
-       isClose = t ~== end
 
 stail :: [a] -> [a]
 stail []     = []
