@@ -7,10 +7,9 @@ import System.IO
 import System.Posix.Files
 import System.Posix.Time
 import Text.HTML.TagSoup
-import Text.HTML.TagSoup.Match
 
 -- This code could really benefit from a proper parser!
--- scrape :: String -> IO String
+scrape :: String -> IO String
 scrape s = do
   body <- getResponseBody =<< simpleHTTP (getRequest $ "http://haskell.org/haskellwiki/" ++ s)
   let tags = parseTags body
@@ -53,6 +52,15 @@ removeEditSections = reverse . fst . foldl f ([], True)
 stail :: [a] -> [a]
 stail []     = []
 stail (_:xs) = xs
+
+-- form Text.HTML.TagSoup.Match
+tagText :: (str -> Bool) -> Tag str -> Bool
+tagText p (TagText text) = p text
+tagText _ _ = False
+
+tagComment :: (str -> Bool) -> Tag str -> Bool
+tagComment p (TagComment text) = p text
+tagComment _ _ = False
 
 -- Cached everything for a minute, not to be too hard on Haskell.org
 -- Note: Ugly code ahead!
