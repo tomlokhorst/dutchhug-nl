@@ -1,26 +1,52 @@
-name:               dutchhug-nl
-version:            0.0.0
-license:            BSD3
-license-file:       LICENSE
-author:             Tom Lokhorst tom@lokhorst.eu
-maintainer:         Tom Lokhorst tom@lokhorst.eu
-synopsis:           A web application based on Yesod.
-description:        The default web application. You might want to change this.
-category:           Web
-stability:          Stable
-cabal-version:      >= 1.2
-build-type:         Simple
-homepage:           http://dutchhug.nl/
+Name:                dutchhug-nl
+Version:             0.2
+Synopsis:            DutchHUG.nl website
+Description:         Website for the Dutch Haskell User Group.
+License:             BSD3
+Author:              Tom Lokhorst
+Maintainer:          tom@lokhorst.eu
+Stability:           Experimental
+Category:            Web
+Build-type:          Simple
+Cabal-version:       >=1.2
 
-executable          dutchhug-nl
-    hs-source-dirs: src
-    build-depends:  base >= 4 && < 5,
-                    yesod >= 0.0.0 && < 0.1,
-                    safe-failure >= 0.4.0 && < 0.5,
-                    data-object-yaml >= 0.2.0.1 && < 0.3,
-                    HStringTemplate >= 0.6.2 && <0.7,
-                    HTTP >= 4000.0.9 && < 4000.1,
-                    tagsoup >= 0.8 && < 0.9,
-                    unix >= 2.4.0 && < 2.5
-    main-is:        DutchHug.hs
-    ghc-options:    -Wall
+Flag development
+  Description: Whether to build the server in development (interpreted) mode
+  Default: False
+
+Executable dutchhug-nl
+  hs-source-dirs: src
+  main-is: Main.hs
+
+  Build-depends:
+    base >= 4 && < 5,
+    bytestring >= 0.9.1 && < 0.10,
+    heist >= 0.5 && < 0.6,
+    MonadCatchIO-transformers >= 0.2.1 && < 0.3,
+    mtl >= 2 && < 3,
+    snap == 0.4.*,
+    snap-core == 0.4.*,
+    snap-server == 0.4.*,
+    text >= 0.11 && < 0.12,
+    time >= 1.1 && < 1.3,
+    xmlhtml == 0.1.*
+
+  extensions: TypeSynonymInstances MultiParamTypeClasses
+
+  if flag(development)
+    cpp-options: -DDEVELOPMENT
+    build-depends: hint >= 0.3.2 && < 0.4
+    -- In development mode, speed is already going to suffer, so skip
+    -- the fancy optimization flags.  Additionally, disable all
+    -- warnings.  The hint library doesn't give an option to execute
+    -- compiled code when there were also warnings, so disabling
+    -- warnings allows quicker workflow.
+    ghc-options: -threaded -w
+  else
+    if impl(ghc >= 6.12.0)
+      ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
+                   -fno-warn-orphans -fno-warn-unused-do-bind
+    else
+      ghc-options: -threaded -Wall -fwarn-tabs -funbox-strict-fields -O2
+                   -fno-warn-orphans
+
