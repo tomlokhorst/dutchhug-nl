@@ -14,15 +14,16 @@ module Site
 import           Control.Applicative
 import qualified Data.ByteString as BS
 import           Data.Maybe
+import           Data.Text (pack)
 import qualified Data.Text.Encoding as T
 import           Snap.Extension.Heist
 import           Snap.Extension.Timer
 import           Snap.Util.FileServe
 import           Snap.Types
 import           Text.Templating.Heist
-import           Web.Zwaluw
 
 import           Application
+import           Router
 import           Sitemap
    
 ------------------------------------------------------------------------------
@@ -51,6 +52,14 @@ echo = do
 
 
 ------------------------------------------------------------------------------
+-- | Renders a page.
+page :: Sitemap -> Application ()
+page s = do
+  let nm = show s
+  heistLocal (bindString "name" (pack nm)) $ render "page"
+
+
+------------------------------------------------------------------------------
 -- | Redirect old "content" urls to new urls
 redirectOldUrls :: Application ()
 redirectOldUrls
@@ -67,14 +76,14 @@ redirectOldUrls
       , "lightweight-program-inversion.pdf", "sirenial.pdf"
       , "why-haskell-does-not-matter.pdf"
       ]
-  
-  
+
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
 site = route [ ("/",            index)
              , ("/echo/:stuff", echo)
              ]
+       <|> router sitemap page
        <|> redirectOldUrls
        <|> serveDirectory "resources/static"
 
