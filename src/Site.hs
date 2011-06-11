@@ -12,6 +12,7 @@ module Site
   ) where
 
 import           Control.Applicative
+import qualified Data.ByteString as BS
 import           Data.Maybe
 import qualified Data.Text.Encoding as T
 import           Snap.Extension.Heist
@@ -47,11 +48,30 @@ echo = do
   where
     decodedParam p = fromMaybe "" <$> getParam p
 
-
+-- | Redirect old "content" urls to new urls
+redirectOldUrls :: Application ()
+redirectOldUrls
+   = route $ map g files
+  where
+    g :: BS.ByteString -> (BS.ByteString, Application ())
+    g fn = ( "/static/dutchhugday-2010/" `BS.append` fn
+           , redirect' ("/media/dutchhugday-2010/" `BS.append` fn) 301)
+    files :: [BS.ByteString]
+    files =
+      [ "blazehtml.pdf", "clash.pdf"
+      , "functional-programming-in-the-industry.pdf"
+      , "functional-programming-typlab.pdf", "lightweight-monadic-regions.pdf"
+      , "lightweight-program-inversion.pdf", "sirenial.pdf"
+      , "why-haskell-does-not-matter.pdf"
+      ]
+  
+  
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
 site = route [ ("/",            index)
              , ("/echo/:stuff", echo)
              ]
+       <|> redirectOldUrls
        <|> serveDirectory "resources/static"
+
