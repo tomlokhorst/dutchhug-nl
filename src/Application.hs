@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeSynonymInstances, MultiParamTypeClasses #-}
 {-
 
 This module defines our application's monad and any application-specific
@@ -56,3 +57,4 @@ applicationInitializer = do
     heist <- heistInitializer "resources/templates"
     timer <- timerInitializer
     return $ ApplicationState heist timer
+
