@@ -29,7 +29,8 @@ Executable dutchhug-nl
     snap-server == 0.4.*,
     text >= 0.11 && < 0.12,
     time >= 1.1 && < 1.3,
-    xmlhtml == 0.1.*
+    xmlhtml == 0.1.*,
+    Zwaluw == 0.2.*
 
   if flag(development)
     cpp-options: -DDEVELOPMENT

@@ -20,10 +20,11 @@ import           Snap.Extension.Timer
 import           Snap.Util.FileServe
 import           Snap.Types
 import           Text.Templating.Heist
+import           Web.Zwaluw
 
 import           Application
-
-
+import           Sitemap
+   
 ------------------------------------------------------------------------------
 -- | Renders the front page of the sample site.
 --
@@ -48,6 +49,8 @@ echo = do
   where
     decodedParam p = fromMaybe "" <$> getParam p
 
+
+------------------------------------------------------------------------------
 -- | Redirect old "content" urls to new urls
 redirectOldUrls :: Application ()
 redirectOldUrls
