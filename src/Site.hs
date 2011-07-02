@@ -42,6 +42,11 @@ page Home = do
        ]
     )
     $ render "home"
+page AboutUs = do
+  aboutUs <- liftIO $ wikiPage "AboutUs"
+  heistLocal
+    (bindSplice "about-us" $ htmlSplice aboutUs)
+    $ render "about-us"
 page s = do
   let nm = show s
   heistLocal (bindString "name" (pack nm)) $ render "page"
