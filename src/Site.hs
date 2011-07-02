@@ -12,24 +12,53 @@ module Site
   ) where
 
 import           Control.Applicative
+import           Control.Monad.IO.Class
 import qualified Data.ByteString as BS
+import qualified Data.ByteString.Char8 as BS8
 import           Data.Text (pack)
 import           Snap.Extension.Heist
 import           Snap.Util.FileServe
 import           Snap.Types
 import           Text.Templating.Heist
+import           Text.XmlHtml (parseHTML, Document (HtmlDocument))
 
 import           Application
 import           Router
 import           Sitemap
+import           WikiScrape
 
 ------------------------------------------------------------------------------
 -- | Renders a page.
 page :: Sitemap -> Application ()
-page Home = render "home"
+page Home = do
+  upcoming <- liftIO $ wikiTemplate "Upcoming"
+  previously <- liftIO $ wikiTemplate "Previously"
+  intro <- liftIO $ wikiTemplate "Intro"
+  heistLocal
+    (bindSplices
+       [ ("upcoming", htmlSplice upcoming)
+       , ("previously", htmlSplice previously)
+       , ("intro", htmlSplice intro)
+       ]
+    )
+    $ render "home"
 page s = do
   let nm = show s
   heistLocal (bindString "name" (pack nm)) $ render "page"
+
+htmlSplice :: Monad m => String -> Splice m
+htmlSplice html = do
+  let Right (HtmlDocument _ _ ns) = parseHTML "wiki" (BS8.pack html)
+  return ns
+
+wikiPage :: String -> IO String
+wikiPage = wiki ""
+
+wikiTemplate :: String -> IO String
+wikiTemplate = wiki "Template:"
+
+wiki :: String -> String -> IO String
+wiki prefix name = cachedScrape (prefix ++ "Dutch_HUG/" ++ name)
 
 ------------------------------------------------------------------------------
 -- | Redirect urls from old site to new versions
@@ -45,7 +74,7 @@ redirectOldUrls = redirects $ pages ++ files
       , ("DutchHugDay", "dutchhugday")
       ]
     files = map (\fn -> ( "/static/dutchhugday-2010" `BS.append` fn
-                       , "/media/dutchhugday-2010" `BS.append` fn))
+                        , "/media/dutchhugday-2010" `BS.append` fn))
                 fs
     fs =
       [ "blazehtml.pdf", "clash.pdf"

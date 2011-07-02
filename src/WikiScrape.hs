@@ -14,7 +14,7 @@ scrape s = do
   body <- getResponseBody =<< simpleHTTP (getRequest $ "http://haskell.org/haskellwiki/" ++ s)
   let tags = parseTags body
   let ts = tags
-            |> dropWhile (~/= TagOpen "h1" [])
+            |> dropWhile (~/= TagOpen ("h1" :: String) [])
             |> dropWhile (not . tagComment (const True))
             |> tail
             |> dropWhile (tagText (const True))
@@ -46,8 +46,8 @@ removeEditSections = reverse . fst . foldl f ([], True)
     f (ts, b) t = ( if b && not isOpen then t:ts else ts
                   , if b then not isOpen else isClose)
      where
-       isOpen  = t ~== TagOpen "div" [("class", "editsection")]
-       isClose = t ~== TagClose "div"
+       isOpen  = t ~== TagOpen ("div" :: String) [("class", "editsection")]
+       isClose = t ~== TagClose ("div" :: String)
 
 stail :: [a] -> [a]
 stail []     = []
