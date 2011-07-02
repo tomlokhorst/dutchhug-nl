@@ -1,6 +1,5 @@
 <apply template="site">
 <bind tag="doc-title">Dutch Haskell User Group</bind>
-
 <div class="twocolumn leftcolumn">
 <h2>Upcoming</h2>
 <upcoming/>

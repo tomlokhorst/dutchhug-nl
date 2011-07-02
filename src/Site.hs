@@ -26,6 +26,7 @@ import           Sitemap
 ------------------------------------------------------------------------------
 -- | Renders a page.
 page :: Sitemap -> Application ()
+page Home = render "home"
 page s = do
   let nm = show s
   heistLocal (bindString "name" (pack nm)) $ render "page"
