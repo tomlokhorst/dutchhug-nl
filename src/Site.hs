@@ -13,11 +13,8 @@ module Site
 
 import           Control.Applicative
 import qualified Data.ByteString as BS
-import           Data.Maybe
 import           Data.Text (pack)
-import qualified Data.Text.Encoding as T
 import           Snap.Extension.Heist
-import           Snap.Extension.Timer
 import           Snap.Util.FileServe
 import           Snap.Types
 import           Text.Templating.Heist
@@ -25,31 +22,6 @@ import           Text.Templating.Heist
 import           Application
 import           Router
 import           Sitemap
-   
-------------------------------------------------------------------------------
--- | Renders the front page of the sample site.
---
--- The 'ifTop' is required to limit this to the top of a route.
--- Otherwise, the way the route table is currently set up, this action
--- would be given every request.
-index :: Application ()
-index = ifTop $ heistLocal (bindSplices indexSplices) $ render "index"
-  where
-    indexSplices =
-        [ ("start-time",   startTimeSplice)
-        , ("current-time", currentTimeSplice)
-        ]
-
-
-------------------------------------------------------------------------------
--- | Renders the echo page.
-echo :: Application ()
-echo = do
-    message <- decodedParam "stuff"
-    heistLocal (bindString "message" (T.decodeUtf8 message)) $ render "echo"
-  where
-    decodedParam p = fromMaybe "" <$> getParam p
-
 
 ------------------------------------------------------------------------------
 -- | Renders a page.
@@ -58,18 +30,23 @@ page s = do
   let nm = show s
   heistLocal (bindString "name" (pack nm)) $ render "page"
 
-
 ------------------------------------------------------------------------------
--- | Redirect old "content" urls to new urls
+-- | Redirect urls from old site to new versions
 redirectOldUrls :: Application ()
-redirectOldUrls
-   = route $ map g files
+redirectOldUrls = redirects $ pages ++ files
   where
-    g :: BS.ByteString -> (BS.ByteString, Application ())
-    g fn = ( "/static/dutchhugday-2010/" `BS.append` fn
-           , redirect' ("/media/dutchhugday-2010/" `BS.append` fn) 301)
-    files :: [BS.ByteString]
-    files =
+    pages = concatMap f ps
+    f (fn, tn) = [ ("/" `BS.append` fn, "/" `BS.append` tn)
+                 , ("/" `BS.append` fn `BS.append` "/", "/" `BS.append` tn)
+                 ]
+    ps =
+      [ ("AboutUs", "about-us"), ("Meetings", "meetings")
+      , ("DutchHugDay", "dutchhugday")
+      ]
+    files = map (\fn -> ( "/static/dutchhugday-2010" `BS.append` fn
+                       , "/media/dutchhugday-2010" `BS.append` fn))
+                fs
+    fs =
       [ "blazehtml.pdf", "clash.pdf"
       , "functional-programming-in-the-industry.pdf"
       , "functional-programming-typlab.pdf", "lightweight-monadic-regions.pdf"
@@ -77,13 +54,13 @@ redirectOldUrls
       , "why-haskell-does-not-matter.pdf"
       ]
 
+redirects :: [(BS.ByteString, BS.ByteString)] -> Application ()
+redirects = route . map (\(o, n) -> (o, redirect' n 301))
+
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
-site = route [ ("/",            index)
-             , ("/echo/:stuff", echo)
-             ]
-       <|> router sitemap page
-       <|> redirectOldUrls
-       <|> serveDirectory "resources/static"
+site =  router sitemap page
+    <|> redirectOldUrls
+    <|> serveDirectory "resources/static"
 
