@@ -14,7 +14,7 @@ module Site
 import           Control.Applicative
 import           Control.Monad.IO.Class
 import qualified Data.ByteString as BS
-import           Data.Text (pack)
+import           Data.Text (pack, replace)
 import           Data.Text.Encoding (encodeUtf8)
 import           Snap.Extension.Heist
 import           Snap.Util.FileServe
@@ -52,15 +52,20 @@ page Meetings = do
   heistLocal
     (bindSplice "meetings" $ htmlSplice meetings)
     $ render "meetings"
-page s = do
-  let nm = show s
-  heistLocal (bindString "name" (pack nm)) $ render "page"
+page DutchHugDay = do
+  dutchhugday <- liftIO $ wikiPage "DutchHugDay"
+  heistLocal
+    (bindSplice "dutchhugday" $ htmlSplice dutchhugday)
+    $ render "dutchhugday"
 
 htmlSplice :: Monad m => String -> Splice m
 htmlSplice html = do
-  case parseHTML "HaskellWiki" (encodeUtf8 . pack $ html) of
+  case parseHTML "HaskellWiki" (encodeUtf8 . f . pack $ html) of
     Left s  -> return [TextNode $ pack s]
     Right d -> return $ docContent d
+  where
+    -- Ugly hack to get page parsed
+    f = replace "</img>" ""
 
 wikiPage :: String -> IO String
 wikiPage = wiki ""
