@@ -14,13 +14,13 @@ module Site
 import           Control.Applicative
 import           Control.Monad.IO.Class
 import qualified Data.ByteString as BS
-import qualified Data.ByteString.Char8 as BS8
 import           Data.Text (pack)
+import           Data.Text.Encoding (encodeUtf8)
 import           Snap.Extension.Heist
 import           Snap.Util.FileServe
 import           Snap.Types
 import           Text.Templating.Heist
-import           Text.XmlHtml (parseHTML, Document (HtmlDocument))
+import           Text.XmlHtml (parseHTML, Document (..), Node(..))
 
 import           Application
 import           Router
@@ -47,14 +47,20 @@ page AboutUs = do
   heistLocal
     (bindSplice "about-us" $ htmlSplice aboutUs)
     $ render "about-us"
+page Meetings = do
+  meetings <- liftIO $ wikiPage "Meetings"
+  heistLocal
+    (bindSplice "meetings" $ htmlSplice meetings)
+    $ render "meetings"
 page s = do
   let nm = show s
   heistLocal (bindString "name" (pack nm)) $ render "page"
 
 htmlSplice :: Monad m => String -> Splice m
 htmlSplice html = do
-  let Right (HtmlDocument _ _ ns) = parseHTML "wiki" (BS8.pack html)
-  return ns
+  case parseHTML "HaskellWiki" (encodeUtf8 . pack $ html) of
+    Left s  -> return [TextNode $ pack s]
+    Right d -> return $ docContent d
 
 wikiPage :: String -> IO String
 wikiPage = wiki ""
