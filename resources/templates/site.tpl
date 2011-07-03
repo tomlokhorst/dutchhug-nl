@@ -22,9 +22,9 @@ _gaq.push(['_trackPageview']);
 </div>
 <div id=nav>
 <ul>
-<li><a href=/AboutUs>About us</a></li>
-<li><a href=/Meetings>Meetings</a></li>
-<li><a href=/DutchHugDay>Dutch HUG day</a></li>
+<li><a href=/about-us>About us</a></li>
+<li><a href=/meetings>Meetings</a></li>
+<li><a href=/dutchhugday>Dutch HUG day</a></li>
 <li><a href=http://groups.google.com/group/dutch-hug>Mailing list</a></li>
 </ul>
 </div>
