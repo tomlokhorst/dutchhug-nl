@@ -11,7 +11,7 @@ import Text.HTML.TagSoup
 -- This code could really benefit from a proper parser!
 scrape :: String -> IO String
 scrape s = do
-  body <- getResponseBody =<< simpleHTTP (getRequest $ "http://haskell.org/haskellwiki/" ++ s)
+  body <- getResponseBody =<< simpleHTTP (getRequest $ "http://www.haskell.org/haskellwiki/" ++ s)
   let tags = parseTags body
   let ts = tags
             |> dropWhile (~/= TagOpen ("h1" :: String) [])
@@ -36,8 +36,8 @@ fixInternalLinks = map f
     f (TagOpen "a"   xs) = TagOpen "a"   $ map g xs
     f (TagOpen "img" xs) = TagOpen "img" $ map g xs
     f t                  = t
-    g ("href", v) = ("href", if "/" `isPrefixOf` v then "http://haskell.org" ++ v else v)
-    g ("src",  v) = ("src",  if "/" `isPrefixOf` v then "http://haskell.org" ++ v else v)
+    g ("href", v) = ("href", if "/" `isPrefixOf` v then "http://www.haskell.org" ++ v else v)
+    g ("src",  v) = ("src",  if "/" `isPrefixOf` v then "http://www.haskell.org" ++ v else v)
     g x           = x
 
 removeEditSections :: [Tag String] -> [Tag String]
