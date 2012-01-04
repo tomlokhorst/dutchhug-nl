@@ -16,7 +16,7 @@ scrape s = do
   let ts = tags
             |> dropWhile (~/= TagOpen ("h1" :: String) [])
             |> dropWhile (not . tagComment (const True))
-            |> tail
+            |> stail
             |> dropWhile (tagText (const True))
             -- |> removeEditSections
             |> takeWhile (not . tagComment (const True))
