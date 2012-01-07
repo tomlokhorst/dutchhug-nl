@@ -21,6 +21,8 @@ scrape s = do
             -- |> removeEditSections
             |> takeWhile (not . tagComment (const True))
             |> fixInternalLinks
+            |> removeCloseTags
+            |> removeEmptyAttrs
             |> renderTags
   return ts
 
@@ -29,6 +31,21 @@ infixl 5 |>
 -- A little F# experiment :-)
 (|>) :: a -> (a -> b) -> b
 (|>) = flip ($)
+
+removeCloseTags :: [Tag String] -> [Tag String]
+removeCloseTags = filter f
+  where
+    f (TagClose "hr")  = False
+    f (TagClose "img") = False
+    f _                = True
+
+removeEmptyAttrs :: [Tag String] -> [Tag String]
+removeEmptyAttrs = map f
+  where
+    f (TagOpen nm attrs) = TagOpen nm $ filter g attrs
+    f t                = t
+    g (_, "") = False
+    g _       = True
 
 fixInternalLinks :: [Tag String] -> [Tag String]
 fixInternalLinks = map f

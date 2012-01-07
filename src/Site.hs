@@ -57,6 +57,11 @@ page DutchHugDay = do
   heistLocal
     (bindSplice "dutchhugday" $ htmlSplice dutchhugday)
     $ render "dutchhugday"
+page DhdUHac = do
+  dhdUHac <- liftIO $ wiki "" "DHD_UHac"
+  heistLocal
+    (bindSplice "dhd-uhac" $ htmlSplice dhdUHac)
+    $ render "dhd-uhac"
 
 htmlSplice :: Monad m => String -> Splice m
 htmlSplice html = do
@@ -68,13 +73,13 @@ htmlSplice html = do
     f = replace "</img>" ""
 
 wikiPage :: String -> IO String
-wikiPage = wiki ""
+wikiPage = wiki "Dutch_HUG/"
 
 wikiTemplate :: String -> IO String
-wikiTemplate = wiki "Template:"
+wikiTemplate = wiki "Template:Dutch_HUG/"
 
 wiki :: String -> String -> IO String
-wiki prefix name = cachedScrape (prefix ++ "Dutch_HUG/" ++ name)
+wiki prefix name = cachedScrape (prefix ++ name)
 
 ------------------------------------------------------------------------------
 -- | Redirect urls from old site to new versions

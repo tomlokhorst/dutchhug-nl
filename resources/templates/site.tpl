@@ -5,7 +5,7 @@
 <link rel=apple-touch-icon href=/img/apple-touch-icon.png>
 <title><doc-title/></title>
 <script src=https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js></script>
-<script src=lib/jquery.cycle.min.js></script>
+<script src=/lib/jquery.cycle.min.js></script>
 <script>
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', 'UA-9310524-2']);
@@ -24,7 +24,7 @@ _gaq.push(['_trackPageview']);
 <ul>
 <li><a href=/about-us>About us</a></li>
 <li><a href=/meetings>Meetings</a></li>
-<li><a href=/dutchhugday>Dutch HUG day</a></li>
+<li><a href=/dhd-uhac>Dutch HUG Day + UHac</a></li>
 <li><a href=http://groups.google.com/group/dutch-hug>Mailing list</a></li>
 </ul>
 </div>
@@ -34,7 +34,7 @@ _gaq.push(['_trackPageview']);
 </section>
 <div id=footer>
 <p>
-Copyright 2010-2011, Dutch Haskell User Group. View the <a href=http://github.com/tomlokhorst/dutchhug-nl>source code</a> for this website on github.
+Copyright 2010-2012, Dutch Haskell User Group. View the <a href=http://github.com/tomlokhorst/dutchhug-nl>source code</a> for this website on github.
 </p>
 </div>
 
